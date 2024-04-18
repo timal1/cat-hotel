@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+
+  backend-cat-hotel:
+    image: 'spring-boot:latest'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db-cat-hotel
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-cat-hotel:5432/cat-hotel
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1q2w3e4r
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - "8085:8085"
+
+  db-cat-hotel:
+    image: 'postgres:15-alpine'
+    environment:
+      POSTGRES_DB: "cat-hotel"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "1q2w3e4r"
+    ports:
+      - "5432:5432"
+
+  frontend-cat-hotel:
+    image: frontend:0.0.1
+    build: cat-hotel-frontend
+    restart: always
+    ports:
+      - '8080:8080'
+    volumes:
+      - /app/frontend/node_modules
+      - ./cat-hotel-frontend:/app/frontend

@@ -1,0 +1,50 @@
+server:
+  servlet:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+  port: 8085
+
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://db-cat-hotel:5432/cat-hotel}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:1q2w3e4r}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: HikariPool
+      maximum-pool-size: ${DB_POOL_SIZE:10}
+      max-lifetime: ${DB_CONNECTION_MAX_LIFETIME:580000}
+      connection-timeout: ${DB_CONNECTION_TIMEOUT:20000}
+  jpa:
+    show-sql: ${JPA_SHOW_SQL:false}
+    generate-ddl: true
+    database: postgresql
+    properties:
+      javax:
+        persistence:
+          sharedCache:
+            mode: ENABLE_SELECTIVE
+      hibernate:
+        ddl-auto: update
+        jdbc:
+          batch_size: 10
+        order_inserts: true
+        order_updates: true
+        batch_fetch_style: PADDED
+        query:
+          in_clause_parameter_padding: true
+          fail_on_pagination_over_collection_fetch: true
+
+        format_sql: ${HIBERNATE_FORMAT_SQL:false}
+        generate_statistics: ${HIBERNATE_GENERATE_STATISTICS:false}
+    open-in-view: false
+
+
+  servlet:
+    multipart:
+      max-file-size: 104857600
+
+cross:
+  origin: "http://localhost:8080"
